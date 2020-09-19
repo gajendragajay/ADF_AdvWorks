@@ -1,0 +1,92 @@
+{
+	"name": "SalesIndividualCustomerView",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdvWorksDBLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "BusinessEntityID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Title",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FirstName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MiddleName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LastName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Suffix",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PhoneNumber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PhoneNumberType",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EmailAddress",
+				"type": "nvarchar"
+			},
+			{
+				"name": "EmailPromotion",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "AddressType",
+				"type": "nvarchar"
+			},
+			{
+				"name": "AddressLine1",
+				"type": "nvarchar"
+			},
+			{
+				"name": "AddressLine2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "City",
+				"type": "nvarchar"
+			},
+			{
+				"name": "StateProvinceName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PostalCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CountryRegionName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Demographics",
+				"type": "xml"
+			}
+		],
+		"typeProperties": {
+			"schema": "Sales",
+			"table": "vIndividualCustomer"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,32 @@
+{
+	"name": "CreateCSVforDimCustomer",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SalesCustomer",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "stagingdatalake",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Filter1"
+				}
+			],
+			"script": "source(output(\n\t\tCustomerKey as integer,\n\t\tCustomerKeyCount as long,\n\t\tCustomerAlternateKey as string,\n\t\tTitle as string,\n\t\tFirstName as string,\n\t\tMiddleName as string,\n\t\tLastName as string,\n\t\tNameStyle as boolean,\n\t\tBirthDate as timestamp,\n\t\tMaritalStatus as string,\n\t\tSuffix as string,\n\t\tGender as string,\n\t\tEmailAddress as string,\n\t\tYearlyIncome as string,\n\t\tAddressLine1 as string,\n\t\tAddressLine2 as string,\n\t\tPhone as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: 'SELECT \\n    p.[BusinessEntityID] as [CustomerKey]\\n\t ,ROW_NUMBER() OVER (partition by p.[BusinessEntityID] order by p.[BusinessEntityID]) AS [CustomerKeyCount]\\n\t,c.[AccountNumber] as [CustomerAlternateKey]\\n    ,p.[Title]\\n    ,p.[FirstName]\\n    ,p.[MiddleName]\\n    ,p.[LastName]\\n\t,p.[NameStyle]\\n\t,vpd.[BirthDate]\\n\t,vpd.[MaritalStatus]\\n    ,p.[Suffix]\\n\t,vpd.[Gender]\\n    ,vic.[EmailAddress]\\n\t,vpd.[YearlyIncome]\\n    ,vic.[AddressLine1]\\n    ,vic.[AddressLine2]\\n\t,vic.[PhoneNumber] as [Phone]\\nFROM [Person].[Person] p\\n    INNER JOIN [Sales].[Customer] c \\n    ON c.[PersonID] = p.[BusinessEntityID] \\n\tLEFT OUTER JOIN [Sales].[vIndividualCustomer] vic\\n\tON vic.[BusinessEntityID] = p.[BusinessEntityID]\\n\tLEFT OUTER JOIN [Sales].[vPersonDemographics] vpd\\n\tON vpd.[BusinessEntityID] = p.[BusinessEntityID]\\nWHERE c.StoreID IS NULL',\n\tformat: 'query') ~> source1\nsource1 filter(CustomerKeyCount==1) ~> Filter1\nFilter1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[('DimCustomer'+ '_' + toString(currentDate(),'ddMMYYYY') + '.csv')],\n\tmapColumn(\n\t\tCustomerKey,\n\t\tCustomerAlternateKey,\n\t\tTitle,\n\t\tFirstName,\n\t\tMiddleName,\n\t\tLastName,\n\t\tNameStyle,\n\t\tBirthDate,\n\t\tMaritalStatus,\n\t\tSuffix,\n\t\tGender,\n\t\tEmailAddress,\n\t\tYearlyIncome,\n\t\tAddressLine1,\n\t\tAddressLine2,\n\t\tPhone\n\t),\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}

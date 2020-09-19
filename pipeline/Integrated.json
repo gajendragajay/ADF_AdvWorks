@@ -1,0 +1,66 @@
+{
+	"name": "Integrated",
+	"properties": {
+		"activities": [
+			{
+				"name": "DimCustomer",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DimCustomerFinal",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DimProduct",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DimCustomer",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DimProductFinal",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "FactInternetSales",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DimProduct",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FactInternetSalesFinal",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "ProjectBrillio"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-09-02T16:05:30Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

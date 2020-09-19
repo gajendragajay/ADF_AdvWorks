@@ -1,0 +1,33 @@
+{
+	"name": "DimCustomerCSVToDW",
+	"properties": {
+		"activities": [
+			{
+				"name": "CSVTODW",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DimCustomerToDW",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-09-01T18:53:55Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

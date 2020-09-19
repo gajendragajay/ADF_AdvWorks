@@ -1,0 +1,710 @@
+{
+	"name": "DimProductCSVToDW",
+	"properties": {
+		"activities": [
+			{
+				"name": "CopyCSVToDW",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "advworks/staging/"
+					},
+					{
+						"name": "Destination",
+						"value": "dbo.DimProduct"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "staging",
+							"wildcardFileName": "DimProduct*.csv"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ProductKey",
+									"type": "Int32",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ProductKey",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductAlternateKey",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ProductAlternateKey",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductSubcategoryKey",
+									"type": "Int32",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ProductSubcategoryKey",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "WeightUnitMeasureCode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "WeightUnitMeasureCode",
+									"type": "String",
+									"physicalType": "nchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SizeUnitMeasureCode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SizeUnitMeasureCode",
+									"type": "String",
+									"physicalType": "nchar"
+								}
+							},
+							{
+								"source": {
+									"name": "EnglishProductName",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EnglishProductName",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "StandardCost",
+									"type": "Decimal",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "StandardCost",
+									"type": "Decimal",
+									"physicalType": "money"
+								}
+							},
+							{
+								"source": {
+									"name": "FinishedGoodsFlag",
+									"type": "Boolean",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "FinishedGoodsFlag",
+									"type": "Boolean",
+									"physicalType": "bit"
+								}
+							},
+							{
+								"source": {
+									"name": "Color",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Color",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SafetyStockLevel",
+									"type": "Int16",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SafetyStockLevel",
+									"type": "Int16",
+									"physicalType": "smallint"
+								}
+							},
+							{
+								"source": {
+									"name": "ReorderPoint",
+									"type": "Int16",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ReorderPoint",
+									"type": "Int16",
+									"physicalType": "smallint"
+								}
+							},
+							{
+								"source": {
+									"name": "ListPrice",
+									"type": "Decimal",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ListPrice",
+									"type": "Decimal",
+									"physicalType": "money"
+								}
+							},
+							{
+								"source": {
+									"name": "Size",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Size",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "SizeRange",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SizeRange",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Weight",
+									"type": "Single",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Weight",
+									"type": "Double",
+									"physicalType": "float"
+								}
+							},
+							{
+								"source": {
+									"name": "DaysToManufacture",
+									"type": "Int32",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DaysToManufacture",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductLine",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ProductLine",
+									"type": "String",
+									"physicalType": "nchar"
+								}
+							},
+							{
+								"source": {
+									"name": "DealerPrice",
+									"type": "Decimal",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DealerPrice",
+									"type": "Decimal",
+									"physicalType": "money"
+								}
+							},
+							{
+								"source": {
+									"name": "Class",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Class",
+									"type": "String",
+									"physicalType": "nchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Style",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Style",
+									"type": "String",
+									"physicalType": "nchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ModelName",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ModelName",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "EnglishDescription",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EnglishDescription",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "StartDate",
+									"type": "DateTime",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "StartDate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DimProductCSV",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DimProductDW",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CopyCSVToProcessed",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "CopyCSVToDW",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "advworks/staging/"
+					},
+					{
+						"name": "Destination",
+						"value": "advworks/processedFiles/"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": false,
+							"wildcardFolderPath": "staging",
+							"wildcardFileName": "DimProduct*.csv"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".csv"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ProductKey",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ProductKey",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductAlternateKey",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ProductAlternateKey",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductSubcategoryKey",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ProductSubcategoryKey",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "WeightUnitMeasureCode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "WeightUnitMeasureCode",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SizeUnitMeasureCode",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SizeUnitMeasureCode",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EnglishProductName",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EnglishProductName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "StandardCost",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "StandardCost",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FinishedGoodsFlag",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "FinishedGoodsFlag",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Color",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Color",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SafetyStockLevel",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SafetyStockLevel",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ReorderPoint",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ReorderPoint",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ListPrice",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ListPrice",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Size",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Size",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SizeRange",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SizeRange",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Weight",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Weight",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DaysToManufacture",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DaysToManufacture",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductLine",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ProductLine",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DealerPrice",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DealerPrice",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Class",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Class",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Style",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Style",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ModelName",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ModelName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EnglishDescription",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EnglishDescription",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "StartDate",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "StartDate",
+									"type": "String"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DimProductCSV",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "processedfiles",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "DeleteDimProductCSV",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "CopyCSVToProcessed",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DimProductCSV",
+						"type": "DatasetReference"
+					},
+					"enableLogging": false,
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"wildcardFileName": "DimProduct*.csv"
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-08-31T23:53:06Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

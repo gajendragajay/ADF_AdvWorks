@@ -1,0 +1,28 @@
+{
+	"name": "CreateCSVforDimProduct",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ProductionProduct",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "stagingdatalake",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"script": "source(output(\n\t\tProductKey as integer,\n\t\tProductAlternateKey as string,\n\t\tProductSubcategoryKey as integer,\n\t\tWeightUnitMeasureCode as string,\n\t\tSizeUnitMeasureCode as string,\n\t\tEnglishProductName as string,\n\t\tStandardCost as decimal(19,4),\n\t\tFinishedGoodsFlag as boolean,\n\t\tColor as string,\n\t\tSafetyStockLevel as short,\n\t\tReorderPoint as short,\n\t\tListPrice as decimal(19,4),\n\t\tSize as string,\n\t\tWeight as decimal(8,2),\n\t\tDaysToManufacture as integer,\n\t\tProductLine as string,\n\t\tDealerPrice as decimal(21,5),\n\t\tClass as string,\n\t\tStyle as string,\n\t\tModelName as string,\n\t\tEnglishDescription as string,\n\t\tStartDate as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tquery: 'SELECT \\n    p.[ProductID] as [ProductKey]\\n\t,p.[ProductNumber] as [ProductAlternateKey]\\n      ,p.[ProductSubcategoryID] as [ProductSubcategoryKey]\\n      ,p.[WeightUnitMeasureCode]\\n      ,p.[SizeUnitMeasureCode]\\n    ,p.[Name] as [EnglishProductName]\\n      ,p.[StandardCost]\\n\t,p.[FinishedGoodsFlag]\\n      ,p.[Color]\\n      ,p.[SafetyStockLevel]\\n      ,p.[ReorderPoint]\\n      ,p.[ListPrice]\\n      ,p.[Size]\\n      ,p.[Weight]\\n      ,p.[DaysToManufacture]\\n      ,p.[ProductLine]\\n\t  , (0.6)*p.[ListPrice] as [DealerPrice]\\n      ,p.[Class]\\n      ,p.[Style]\\n    ,pm.[Name] AS [ModelName] \\n    ,pd.[Description] as [EnglishDescription]\\n      ,p.[SellStartDate] as [StartDate]\\nFROM [Production].[Product] p \\n    INNER JOIN [Production].[ProductModel] pm \\n    ON p.[ProductModelID] = pm.[ProductModelID] \\n    INNER JOIN [Production].[ProductModelProductDescriptionCulture] pmx \\n    ON pm.[ProductModelID] = pmx.[ProductModelID] \\n    INNER JOIN [Production].[ProductDescription] pd \\n    ON pmx.[ProductDescriptionID] = pd.[ProductDescriptionID]\\n\twhere pmx.[CultureID] = \\'en\\'',\n\tformat: 'query') ~> source1\nsource1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:[('DimProduct'+ '_' + toString(currentDate(),'ddMMYYYY') + '.csv' )],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}

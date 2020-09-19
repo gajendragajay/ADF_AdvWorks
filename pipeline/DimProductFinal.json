@@ -1,0 +1,66 @@
+{
+	"name": "DimProductFinal",
+	"properties": {
+		"activities": [
+			{
+				"name": "CreateCSVforDimProduct",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "CreateCSVforDimProduct",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					}
+				}
+			},
+			{
+				"name": "DimProductsCSVTODW",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "CreateCSVforDimProduct",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DimProductsCSVTODW",
+						"type": "DataFlowReference"
+					},
+					"integrationRuntime": {
+						"referenceName": "AutoResolveIntegrationRuntime",
+						"type": "IntegrationRuntimeReference"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "ProjectBrillio"
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-09-02T08:51:36Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

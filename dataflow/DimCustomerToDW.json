@@ -1,0 +1,48 @@
+{
+	"name": "DimCustomerToDW",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DimCustomerCSV",
+						"type": "DatasetReference"
+					},
+					"name": "DimCustomerCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "DimCustomerDW",
+						"type": "DatasetReference"
+					},
+					"name": "DimCustomerDW"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DimCustomerDW",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "AlterRow1"
+				},
+				{
+					"name": "DerivedColumn1"
+				},
+				{
+					"name": "HashDW"
+				},
+				{
+					"name": "Exists1"
+				}
+			],
+			"script": "source(output(\n\t\tCustomerKey as short,\n\t\tCustomerAlternateKey as string,\n\t\tTitle as string,\n\t\tFirstName as string,\n\t\tMiddleName as string,\n\t\tLastName as string,\n\t\tNameStyle as boolean,\n\t\tBirthDate as timestamp,\n\t\tMaritalStatus as string,\n\t\tSuffix as string,\n\t\tGender as string,\n\t\tEmailAddress as string,\n\t\tYearlyIncome as string,\n\t\tAddressLine1 as string,\n\t\tAddressLine2 as string,\n\t\tPhone as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tmoveFiles: ['staging','processedFiles'],\n\twildcardPaths:['staging/DimCustomer*.csv']) ~> DimCustomerCSV\nsource(output(\n\t\tCustomerKey as integer,\n\t\tCustomerAlternateKey as string,\n\t\tTitle as string,\n\t\tFirstName as string,\n\t\tMiddleName as string,\n\t\tLastName as string,\n\t\tNameStyle as boolean,\n\t\tBirthDate as date,\n\t\tMaritalStatus as string,\n\t\tSuffix as string,\n\t\tGender as string,\n\t\tEmailAddress as string,\n\t\tYearlyIncome as decimal(19,4),\n\t\tAddressLine1 as string,\n\t\tAddressLine2 as string,\n\t\tPhone as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> DimCustomerDW\nExists1 alterRow(upsertIf(true())) ~> AlterRow1\nDimCustomerCSV derive(YearlyIncome = toDecimal(iif(equals(YearlyIncome, '25001-50000'), 50000, iif(equals(YearlyIncome, 'greater than 100000'), 100000, iif(equals(YearlyIncome, '50001-75000'), 75000, iif(equals(YearlyIncome, '0-25000'), 25000, iif(equals(YearlyIncome, '75001-100000'), 100000, 0)))))),\n\t\tHashKey = sha1(CustomerKey,CustomerAlternateKey,Title,FirstName,MiddleName,LastName,NameStyle,BirthDate,MaritalStatus,Suffix,Gender,EmailAddress,YearlyIncome,AddressLine1,AddressLine2,Phone)) ~> DerivedColumn1\nDimCustomerDW derive(HashKey = sha1(CustomerKey,CustomerAlternateKey,Title,FirstName,MiddleName,LastName,NameStyle,BirthDate,MaritalStatus,Suffix,Gender,EmailAddress,YearlyIncome,AddressLine1,AddressLine2,Phone)) ~> HashDW\nDerivedColumn1, HashDW exists(DerivedColumn1@HashKey == HashDW@HashKey,\n\tnegate:true,\n\tbroadcast: 'auto')~> Exists1\nAlterRow1 sink(input(\n\t\tCustomerKey as integer,\n\t\tCustomerAlternateKey as string,\n\t\tTitle as string,\n\t\tFirstName as string,\n\t\tMiddleName as string,\n\t\tLastName as string,\n\t\tNameStyle as boolean,\n\t\tBirthDate as date,\n\t\tMaritalStatus as string,\n\t\tSuffix as string,\n\t\tGender as string,\n\t\tEmailAddress as string,\n\t\tYearlyIncome as decimal(19,4),\n\t\tAddressLine1 as string,\n\t\tAddressLine2 as string,\n\t\tPhone as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:['CustomerKey'],\n\tformat: 'table',\n\tpreSQLs:['SET IDENTITY_INSERT [gajendra_AdvWorksDW].[dbo].[DimCustomer] ON;'],\n\tpostSQLs:['SET IDENTITY_INSERT [gajendra_AdvWorksDW].[dbo].[DimCustomer] OFF;'],\n\tmapColumn(\n\t\tCustomerKey,\n\t\tCustomerAlternateKey,\n\t\tTitle,\n\t\tFirstName,\n\t\tMiddleName,\n\t\tLastName,\n\t\tNameStyle,\n\t\tBirthDate,\n\t\tMaritalStatus,\n\t\tSuffix,\n\t\tGender,\n\t\tEmailAddress,\n\t\tYearlyIncome,\n\t\tAddressLine1,\n\t\tAddressLine2,\n\t\tPhone\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}

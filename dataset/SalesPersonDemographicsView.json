@@ -1,0 +1,80 @@
+{
+	"name": "SalesPersonDemographicsView",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdvWorksDBLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "BusinessEntityID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TotalPurchaseYTD",
+				"type": "money",
+				"precision": 19,
+				"scale": 4
+			},
+			{
+				"name": "DateFirstPurchase",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "BirthDate",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "MaritalStatus",
+				"type": "nvarchar"
+			},
+			{
+				"name": "YearlyIncome",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Gender",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TotalChildren",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NumberChildrenAtHome",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Education",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Occupation",
+				"type": "nvarchar"
+			},
+			{
+				"name": "HomeOwnerFlag",
+				"type": "bit"
+			},
+			{
+				"name": "NumberCarsOwned",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "Sales",
+			"table": "vPersonDemographics"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
